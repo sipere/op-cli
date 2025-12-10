@@ -1,0 +1,12 @@
+{
+  "name": "@sipere/op-cli",
+  "version": "0.0.1",
+  "keywords": [],
+  "author": "Sallai András",
+  "license": "ISC",
+  "description": "CLI for Sipere",
+  "type": "module",
+  "dependencies": {
+    "yargs": "^18.0.0"
+  }
+}
