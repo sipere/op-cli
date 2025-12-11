@@ -1,6 +1,6 @@
 {
   "name": "@sipere/op-cli",
-  "version": "0.9.0",
+  "version": "0.9.1",
   "keywords": ["rest", "api", "cli"],
   "author": "Sallai András",
   "license": "MIT",
