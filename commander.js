@@ -12,6 +12,7 @@ import freshMigrations from './lib/commands/migration/freshMigrations.js';
 import rollbackMigrations from './lib/commands/migration/rollbackMigrations.js';
 import startGenerateAdmin from './lib/commands/startGenAdmin.js';
 import runImportData from './lib/commands/importData.js';
+import genRouter from './lib/commands/genRouter.js';
 import { startGenerateConf, startGenerateTestConf } from './lib/commands/genConf.js';
 
 const opCommander = {
@@ -144,6 +145,21 @@ function run(argv) {
         handler: async (argv) => {            
             const { seederName } = argv
             await startSeeder(seederName)
+        }
+    })
+    .command({
+        command: 'make:router <routerName>',
+        describe: 'Generate a new router',
+        builder: (yargs) => {
+            return yargs
+            .positional('routerName', {
+                describe: 'Router name',
+                type: 'string',
+            })
+        },
+        handler: async (argv) => {
+            const { routerName } = argv
+            await genRouter(routerName)
         }
     })
     .command({
