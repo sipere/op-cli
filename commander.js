@@ -21,7 +21,6 @@ import { startGenerateConf, startGenerateTestConf } from './lib/commands/genConf
 
 const opCommander = {
     parse: (argv) => {
-        console.log(argv[2])
         run(argv)
     }
 }

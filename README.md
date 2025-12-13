@@ -1,3 +1,3 @@
 # op-cli
 
-The CLI for operation.
+The CLI for Sipere operation.
