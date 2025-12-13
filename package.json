@@ -13,7 +13,6 @@
   "dependencies": {
     "generate-api-key": "^1.0.2",
     "read": "^5.0.1",
-    "replace": "^1.2.2",
     "umzug": "^3.8.2",
     "yargs": "^18.0.0"
   },

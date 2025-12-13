@@ -13,6 +13,10 @@ import rollbackMigrations from './lib/commands/migration/rollbackMigrations.js';
 import startGenerateAdmin from './lib/commands/startGenAdmin.js';
 import runImportData from './lib/commands/importData.js';
 import genRouter from './lib/commands/genRouter.js';
+import genTest from './lib/commands/genTest.js';
+import genModrel from './lib/commands/genModrel.js';
+import resetSeeders from './lib/commands/seeder/resetSeeders.js';
+import rollbackSeeders from './lib/commands/seeder/rollbackSeeders.js';
 import { startGenerateConf, startGenerateTestConf } from './lib/commands/genConf.js';
 
 const opCommander = {
@@ -57,6 +61,16 @@ function run(argv) {
                 type: 'boolean',
                 description: 'Generate a seeder for the model',
             })
+            .option('t', {
+                alias: 'test',
+                type: 'boolean',
+                description: 'Generate a test for the model',
+            })
+            .option('modrel', {
+                alias: 'modrel',
+                type: 'boolean',
+                description: 'Generate a modrel for the model',
+            })
             .option('a', {
                 alias: 'all',
                 type: 'boolean',
@@ -64,7 +78,8 @@ function run(argv) {
             })
         },
         handler: async (argv) => {            
-            const { name, controller, router, migration, seeder, all} = argv
+            const { name, controller, router, migration, 
+                seeder, test, modrel, all } = argv
             await genModel(name)
             if(controller && !all) {
                 await genController(name)
@@ -78,11 +93,19 @@ function run(argv) {
             if(seeder && !all) {
                 await genSeeder(name)
             }
+            if(test && !all) {
+                await genTest(name)
+            }
+            if(modrel && !all) {
+                await genModrel(name)
+            }
             if(all) {
                 await genController(name)
                 await genMigration(name)
                 await genSeeder(name)
+                await genTest(name)
                 await genRouter(name)
+                await genModrel(name)
             }
         }
     })
@@ -191,6 +214,20 @@ function run(argv) {
         }
     })
     .command({
+        command: 'db:seed:reset',
+        describe: 'Reset seeders',        
+        handler: async (argv) => {            
+            await resetSeeders()
+        }
+    })
+    .command({
+        command: 'db:seed:rollback',
+        describe: 'Rollback seeders',
+        handler: async (argv) => {
+            await rollbackSeeders()
+        }
+    })
+    .command({
         command: 'make:router <routerName>',
         describe: 'Generate a new router',
         builder: (yargs) => {
@@ -203,6 +240,36 @@ function run(argv) {
         handler: async (argv) => {
             const { routerName } = argv
             await genRouter(routerName)
+        }
+    })
+    .command({
+        command: 'make:test <testName>',
+        describe: 'Generate a new test',
+        builder: (yargs) => {
+            return yargs
+            .positional('testName', {
+                describe: 'Test name',
+                type: 'string',
+            })
+        },
+        handler: async (argv) => {
+            const { testName } = argv
+            await genTest(testName)
+        }
+    })
+    .command({
+        command: 'make:modrel <modelName>',
+        describe: 'Generate a new modrel',
+        builder: (yargs) => {
+            return yargs
+            .positional('modelName', {
+                describe: 'Model name',
+                type: 'string',
+            })
+        },
+        handler: async (argv) => {
+            const { modelName } = argv
+            await genModrel(modelName)
         }
     })
     .command({
