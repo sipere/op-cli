@@ -37,10 +37,53 @@ function run(argv) {
                 describe: 'Model name',
                 type: 'string',
             })
+            .option('c', {
+                alias: 'controller',
+                type: 'boolean',
+                description: 'Generate a controller for the model',
+            })
+            .option('r', {
+                alias: 'router',
+                type: 'boolean',
+                description: 'Generate a router for the model',
+            })
+            .option('m', {
+                alias: 'migration',
+                type: 'boolean',
+                description: 'Generate a migration for the model',
+            })
+            .option('s', {
+                alias: 'seeder',
+                type: 'boolean',
+                description: 'Generate a seeder for the model',
+            })
+            .option('a', {
+                alias: 'all',
+                type: 'boolean',
+                description: 'Generate all files for the model',
+            })
         },
         handler: async (argv) => {            
-            const { name } = argv
+            const { name, controller, router, migration, seeder, all} = argv
             await genModel(name)
+            if(controller && !all) {
+                await genController(name)
+            }
+            if(router && !all) {
+                await genRouter(name)
+            }
+            if(migration && !all) {
+                await genMigration(name)
+            }
+            if(seeder && !all) {
+                await genSeeder(name)
+            }
+            if(all) {
+                await genController(name)
+                await genMigration(name)
+                await genSeeder(name)
+                await genRouter(name)
+            }
         }
     })
     .command({
