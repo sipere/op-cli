@@ -1,6 +1,6 @@
 {
   "name": "@sipere/op-cli",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "keywords": [
     "rest",
     "api",
@@ -12,6 +12,7 @@
   "type": "module",
   "dependencies": {
     "generate-api-key": "^1.0.2",
+    "pluralize-esm": "^9.0.5",
     "read": "^5.0.1",
     "umzug": "^3.8.2",
     "yargs": "^18.0.0"
