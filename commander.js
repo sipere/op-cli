@@ -29,15 +29,19 @@ function run(argv) {
     yargs(hideBin(argv))
     .version()
     .strict()
-    .usage('Usage: node <command> [name]')
-    .demandCommand(2, 'Please specify at least two arguments')
+    .usage('Usage: node <command> [name] [pluralName]')
+    .demandCommand(3, 'Please specify at least two arguments')
     .command({
-        command: 'make:model <name>',
+        command: 'make:model <name> [pluralName]',
         describe: 'Generate a new Sequelize model',        
         builder: (yargs) => {
             return yargs
             .positional('name', {                
                 describe: 'Model name',
+                type: 'string',
+            })
+            .positional('pluralName', {                
+                describe: 'Model plural name',
                 type: 'string',
             })
             .option('c', {
@@ -77,39 +81,39 @@ function run(argv) {
             })
         },
         handler: async (argv) => {            
-            const { name, controller, router, migration, 
+            const { name, pluralName, controller, router, migration, 
                 seeder, test, modrel, all } = argv
-            await genModel(name)
+            await genModel(name, pluralName)
             if(controller && !all) {
-                await genController(name)
+                await genController(name, pluralName)
             }
             if(router && !all) {
-                await genRouter(name)
+                await genRouter(name, pluralName)
             }
             if(migration && !all) {
-                await genMigration(name)
+                await genMigration(name, pluralName)
             }
             if(seeder && !all) {
-                await genSeeder(name)
+                await genSeeder(name, pluralName)
             }
             if(test && !all) {
-                await genTest(name)
+                await genTest(name, pluralName)
             }
             if(modrel && !all) {
                 await genModrel(name)
             }
             if(all) {
-                await genController(name)
-                await genMigration(name)
-                await genSeeder(name)
-                await genTest(name)
-                await genRouter(name)
+                await genController(name, pluralName)
+                await genMigration(name, pluralName)
+                await genSeeder(name, pluralName)
+                await genTest(name, pluralName)
+                await genRouter(name, pluralName)
                 await genModrel(name)
             }
         }
     })
     .command({
-        command: 'make:controller <name>',
+        command: 'make:controller <name> [pluralName]',
         describe: 'Generate a new controller',        
         builder: (yargs) => {
             return yargs
@@ -117,14 +121,18 @@ function run(argv) {
                 describe: 'Controller name',
                 type: 'string',
             })
+            .positional('pluralName', {
+                describe: 'Controller plural name',
+                type: 'string',
+            })
         },
         handler: async (argv) => {            
-            const { name } = argv
-            await genController(name)
+            const { name, pluralName } = argv
+            await genController(name, pluralName)
         }
     })
     .command({
-        command: 'make:migration <name>',
+        command: 'make:migration <name> [pluralName]',
         describe: 'Generate a new migration',        
         builder: (yargs) => {
             return yargs
@@ -132,10 +140,14 @@ function run(argv) {
                 describe: 'Migration name',
                 type: 'string',
             })
+            .positional('pluralName', {
+                describe: 'Migration plural name',
+                type: 'string',
+            })
         },
         handler: async (argv) => {            
-            const { name } = argv
-            await genMigration(name)
+            const { name, pluralName } = argv
+            await genMigration(name, pluralName)
         }
     })
     .command({
@@ -183,7 +195,7 @@ function run(argv) {
         }
     })
     .command({
-        command: 'make:seeder <name>',
+        command: 'make:seeder <name> [pluralName]',
         describe: 'Generate a new seeder',        
         builder: (yargs) => {
             return yargs
@@ -191,10 +203,14 @@ function run(argv) {
                 describe: 'Seeder name',
                 type: 'string',
             })
+            .positional('pluralName', {
+                describe: 'Seeder plural name',
+                type: 'string',
+            })
         },
         handler: async (argv) => {            
-            const { name } = argv
-            await genSeeder(name)
+            const { name, pluralName } = argv
+            await genSeeder(name, pluralName)
         }
     })
     .command({
@@ -227,7 +243,7 @@ function run(argv) {
         }
     })
     .command({
-        command: 'make:router <routerName>',
+        command: 'make:router <routerName> [pluralName]',
         describe: 'Generate a new router',
         builder: (yargs) => {
             return yargs
@@ -235,14 +251,18 @@ function run(argv) {
                 describe: 'Router name',
                 type: 'string',
             })
+            .positional('pluralName', {
+                describe: 'Router plural name',
+                type: 'string',
+            })
         },
         handler: async (argv) => {
-            const { routerName } = argv
-            await genRouter(routerName)
+            const { routerName, pluralName } = argv
+            await genRouter(routerName, pluralName)
         }
     })
     .command({
-        command: 'make:test <testName>',
+        command: 'make:test <testName> [pluralName]',
         describe: 'Generate a new test',
         builder: (yargs) => {
             return yargs
@@ -250,10 +270,14 @@ function run(argv) {
                 describe: 'Test name',
                 type: 'string',
             })
+            .positional('pluralName', {
+                describe: 'Test plural name',
+                type: 'string',
+            })
         },
         handler: async (argv) => {
-            const { testName } = argv
-            await genTest(testName)
+            const { testName, pluralName } = argv
+            await genTest(testName, pluralName)
         }
     })
     .command({
